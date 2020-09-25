@@ -10,20 +10,21 @@ const server = http.createServer(app);
 // Socket setup
 const io = socket(server);
 
-
 // Set static folder
 app.use(express.static(path.join(__dirname, 'static')));
 
-
 io.on('connection', socket => {
-  socket.broadcast.emit('connected', socket.id)
 
-  socket.on('chat', message => {
-    io.emit('chat', [socket.id, message]);
+  socket.on('connect', socket => {
+    socket.broadcast.emit('connect', 'USER')
   })
 
-  socket.on('typing', () => {
-    socket.broadcast.emit('typing', socket.id);
+  socket.on('chat', data => {
+    io.emit('chat', data);
+  })
+
+  socket.on('typing', username => {
+    socket.broadcast.emit('typing', username);
   })
 
   socket.on('disconnect', () => {

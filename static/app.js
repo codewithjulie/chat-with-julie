@@ -1,5 +1,5 @@
-// const socket = io.connect('http://localhost:3000');
 const socket = io();
+// const socket = io.connect('http://localhost:3000', {_query:"?username=abc"});
 
 // Pull elements from html
 const message = document.getElementById('message');
@@ -12,17 +12,18 @@ const { username } = Qs.parse(location.search, {
   ignoreQueryPrefix: true
 })
 
+console.log(username);
+
 // Send messages to server
 send.addEventListener('submit', e => {
   e.preventDefault();
-  console.log(message.value);
-  socket.emit('chat', message.value)
+  socket.emit('chat', [username, message.value])
   message.value = "";
   message.focus();
 })
 
 // Listens for users entering the room
-socket.on('connected', socketid => {
+socket.on('connect', username => {
   output.innerHTML += '<p><em>' + username + ' has joined the room</em></p>';
 })
 
@@ -36,12 +37,11 @@ socket.on('chat', data => {
 })
 
 message.addEventListener('keypress', () => {
-  
-  socket.emit('typing', socket.id.value);
+  socket.emit('typing', username);
 })
 
-socket.on('typing', data => {
-  feedback.innerHTML = '<p><em>' + data + ' is typing a message</em></p>'
+socket.on('typing', username => {
+  feedback.innerHTML = '<p><em>' + username + ' is typing a message</em></p>'
 })
 
 socket.on('disconnect', message => {
