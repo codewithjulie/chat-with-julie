@@ -1,14 +1,18 @@
 // const socket = io.connect('http://localhost:3000');
 const socket = io();
 
-const socketid = socket.id;
+// Pull elements from html
 const message = document.getElementById('message');
 const send = document.getElementById('chat-form');
 const output = document.getElementById('output');
 const feedback = document.getElementById('feedback');
+const chatWindow = document.getElementById('chat-window');
 
-console.log(socketid);
+const { username } = Qs.parse(location.search, {
+  ignoreQueryPrefix: true
+})
 
+// Send messages to server
 send.addEventListener('submit', e => {
   e.preventDefault();
   console.log(message.value);
@@ -17,13 +21,18 @@ send.addEventListener('submit', e => {
   message.focus();
 })
 
+// Listens for users entering the room
 socket.on('connected', socketid => {
   output.innerHTML += '<p><em>' + socketid + ' has joined the room</em></p>';
 })
 
+// Listens for messages from server
 socket.on('chat', data => {
   output.innerHTML += '<p><strong>' + data[0] + ':</strong> ' + data[1] + '</p>';
   feedback.innerHTML = "";
+
+  // Scroll down
+  chatWindow.scrollTop = chatWindow.scrollHeight;
 })
 
 message.addEventListener('keypress', () => {

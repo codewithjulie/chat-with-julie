@@ -2,6 +2,7 @@
   width: 500px;
   height: 500px;
   background-color: lightgray;
+  overflow-y: scroll;
 }
 
 #chat-form {
@@ -11,4 +12,3 @@
 #output {
   padding: 5px;
 }
-
