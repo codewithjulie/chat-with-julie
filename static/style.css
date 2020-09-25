@@ -1,0 +1,14 @@
+#chat-window {
+  width: 500px;
+  height: 500px;
+  background-color: lightgray;
+}
+
+#chat-form {
+  padding: 10px;
+}
+
+#output {
+  padding: 5px;
+}
+
