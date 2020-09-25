@@ -23,7 +23,7 @@ send.addEventListener('submit', e => {
 
 // Listens for users entering the room
 socket.on('connected', socketid => {
-  output.innerHTML += '<p><em>' + socketid + ' has joined the room</em></p>';
+  output.innerHTML += '<p><em>' + username + ' has joined the room</em></p>';
 })
 
 // Listens for messages from server
