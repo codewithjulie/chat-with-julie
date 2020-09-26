@@ -12,6 +12,7 @@ const { username } = Qs.parse(location.search, {
   ignoreQueryPrefix: true
 })
 
+socket.emit('connected', username);
 console.log(username);
 
 // Send messages to server
@@ -23,8 +24,10 @@ send.addEventListener('submit', e => {
 })
 
 // Listens for users entering the room
-socket.on('connect', username => {
-  output.innerHTML += '<p><em>' + username + ' has joined the room</em></p>';
+socket.on('arrived', user => {
+  console.log(user);
+  output.innerHTML += '<p><em>' + user + ' says I am here</em></p>';
+  chatWindow.scrollTop = chatWindow.scrollHeight; 
 })
 
 // Listens for messages from server
@@ -41,9 +44,12 @@ message.addEventListener('keypress', () => {
 })
 
 socket.on('typing', username => {
+  console.log(username);
   feedback.innerHTML = '<p><em>' + username + ' is typing a message</em></p>'
 })
 
+// Listening to when users leave the room
 socket.on('disconnect', message => {
   output.innerHTML += '<p><em>' + message + '</em></p>';
+  chatWindow.scrollTop = chatWindow.scrollHeight;
 })

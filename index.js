@@ -14,22 +14,25 @@ const io = socket(server);
 app.use(express.static(path.join(__dirname, 'static')));
 
 io.on('connection', socket => {
+  socket.on('connected', username => {
+    console.log(username);
+    socket.broadcast.emit('arrived', username);
 
-  socket.on('connect', socket => {
-    socket.broadcast.emit('connect', 'USER')
+    socket.on('chat', data => {
+      io.emit('chat', data);
+    })
+  
+    socket.on('typing', username => {
+      socket.broadcast.emit('typing', username);
+    })
+  
+    socket.on('disconnect', message => {
+      console.log('someone has disconnected');
+      io.emit('disconnect', username + ' has left the chat');
+    })
   })
 
-  socket.on('chat', data => {
-    io.emit('chat', data);
-  })
 
-  socket.on('typing', username => {
-    socket.broadcast.emit('typing', username);
-  })
-
-  socket.on('disconnect', () => {
-    io.emit('message', 'A user has left the chat');
-  })
 })
 
 const port = process.env.port || 3000;
