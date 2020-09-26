@@ -26,7 +26,7 @@ send.addEventListener('submit', e => {
 // Listens for users entering the room
 socket.on('arrived', user => {
   console.log(user);
-  output.innerHTML += '<p><em>' + user + ' says I am here</em></p>';
+  output.innerHTML += '<p><em>' + user + ' has entered the room</em></p>';
   chatWindow.scrollTop = chatWindow.scrollHeight; 
 })
 
