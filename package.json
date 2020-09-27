@@ -1,12 +1,13 @@
 {
-  "name": "finalchat",
+  "name": "chat-with-julie",
   "version": "1.0.0",
-  "description": "",
+  "description": "Basic chat app",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon node index"
+    "start": "node index",
+    "dev": "nodemon server"
   },
-  "author": "",
+  "author": "codewithjulie",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
