@@ -1,40 +1,52 @@
-// const socket = io.connect('http://localhost:3000');
 const socket = io();
+// const socket = io.connect('http://localhost:3000', {_query:"?username=abc"});
 
-const socketid = socket.id;
+// Pull elements from html
 const message = document.getElementById('message');
 const send = document.getElementById('chat-form');
 const output = document.getElementById('output');
 const feedback = document.getElementById('feedback');
+const chatWindow = document.getElementById('chat-window');
+const userList = document.getElementById('users');
 
-console.log(socketid);
+const { username } = Qs.parse(location.search, {
+  ignoreQueryPrefix: true
+})
 
+socket.emit('connected', username);
+console.log(username);
+
+// Send messages to server
 send.addEventListener('submit', e => {
   e.preventDefault();
-  console.log(message.value);
   socket.emit('chat', message.value)
   message.value = "";
   message.focus();
 })
 
-socket.on('connected', socketid => {
-  output.innerHTML += '<p><em>' + socketid + ' has joined the room</em></p>';
-})
-
+// Listens for messages from server
 socket.on('chat', data => {
-  output.innerHTML += '<p><strong>' + data[0] + ':</strong> ' + data[1] + '</p>';
+  output.innerHTML += data;
   feedback.innerHTML = "";
+
+  // Scroll down
+  chatWindow.scrollTop = chatWindow.scrollHeight;
 })
 
 message.addEventListener('keypress', () => {
-  
-  socket.emit('typing', socket.id.value);
+  socket.emit('typing', username);
 })
 
-socket.on('typing', data => {
-  feedback.innerHTML = '<p><em>' + data + ' is typing a message</em></p>'
+socket.on('typing', username => {
+  console.log(username);
+  feedback.innerHTML = '<p><em>' + username + ' is typing a message</em></p>'
 })
 
-socket.on('disconnect', message => {
-  output.innerHTML += '<p><em>' + message + '</em></p>';
+socket.on('users', users => {
+  userList.innerHTML = "";
+  users.forEach( user=> {
+    const li = document.createElement('li');
+    li.innerText = user;
+    userList.appendChild(li);
+  })
 })
