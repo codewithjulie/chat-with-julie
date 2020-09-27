@@ -1,14 +1,27 @@
 #chat-window {
-  width: 500px;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  width: 800px;
   height: 500px;
   background-color: lightgray;
   overflow-y: scroll;
 }
 
 #chat-form {
+  position: absolute;
   padding: 10px;
 }
 
 #output {
   padding: 5px;
+}
+
+#sidebar {
+  padding: 10px;
+  background-color: slategray;
+  overflow-y: scroll;
+}
+
+#feedback {
+  height: 30px;
 }

@@ -7,6 +7,7 @@ const send = document.getElementById('chat-form');
 const output = document.getElementById('output');
 const feedback = document.getElementById('feedback');
 const chatWindow = document.getElementById('chat-window');
+const userList = document.getElementById('users');
 
 const { username } = Qs.parse(location.search, {
   ignoreQueryPrefix: true
@@ -18,21 +19,14 @@ console.log(username);
 // Send messages to server
 send.addEventListener('submit', e => {
   e.preventDefault();
-  socket.emit('chat', [username, message.value])
+  socket.emit('chat', message.value)
   message.value = "";
   message.focus();
 })
 
-// Listens for users entering the room
-socket.on('arrived', user => {
-  console.log(user);
-  output.innerHTML += '<p><em>' + user + ' has entered the room</em></p>';
-  chatWindow.scrollTop = chatWindow.scrollHeight; 
-})
-
 // Listens for messages from server
 socket.on('chat', data => {
-  output.innerHTML += '<p><strong>' + data[0] + ':</strong> ' + data[1] + '</p>';
+  output.innerHTML += data;
   feedback.innerHTML = "";
 
   // Scroll down
@@ -48,8 +42,11 @@ socket.on('typing', username => {
   feedback.innerHTML = '<p><em>' + username + ' is typing a message</em></p>'
 })
 
-// Listening to when users leave the room
-socket.on('disconnect', message => {
-  output.innerHTML += '<p><em>' + message + '</em></p>';
-  chatWindow.scrollTop = chatWindow.scrollHeight;
+socket.on('users', users => {
+  userList.innerHTML = "";
+  users.forEach( user=> {
+    const li = document.createElement('li');
+    li.innerText = user;
+    userList.appendChild(li);
+  })
 })
