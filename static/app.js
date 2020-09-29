@@ -30,7 +30,7 @@ socket.on('chat', data => {
   feedback.innerHTML = "";
 
   // Scroll down
-  chatWindow.scrollTop = chatWindow.scrollHeight;
+  output.scrollTop = output.scrollHeight;
 })
 
 message.addEventListener('keypress', () => {
